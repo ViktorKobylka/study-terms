@@ -1,3 +1,25 @@
-<p>
-  ai-page works!
-</p>
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title class="ion-text-center">Study Terms</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="outer-wrapper">
+    <div class="content-wrapper">
+      <ion-item>
+        <ion-input placeholder="Enter term..." [(ngModel)]="termInput"></ion-input>
+      </ion-item>
+
+      <ion-card>
+        <ion-card-content>
+          {{ generatedResult }}
+        </ion-card-content>
+      </ion-card>
+
+      <ion-button expand="block" (click)="saveResult()">
+        Save Result
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

@@ -1,3 +1,32 @@
-<p>
-  create-term works!
-</p>
+<ion-header> 
+  <ion-toolbar color="primary">
+    <ion-title class="ion-text-center">Create Term</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="outer-wrapper">
+    <div class="content-wrapper">
+
+      <ion-item>
+        <ion-input placeholder="Enter term..." [(ngModel)]="termInput"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-input placeholder="Enter definition..." [(ngModel)]="definitionInput"></ion-input>
+      </ion-item>
+
+      <ion-card *ngIf="termInput && definitionInput">
+        <ion-card-content>
+          <strong>Term:</strong> {{ termInput }} <br>
+          <strong>Definition:</strong> {{ definitionInput }}
+        </ion-card-content>
+      </ion-card>
+
+      <ion-button expand="block" color="success" (click)="saveTerm()">
+        Save Term
+      </ion-button>
+
+    </div>
+  </div>
+</ion-content>

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, ToastController } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { AiService } from '../../services/ai.service'; 
+import { AiService } from '../../services/ai.service';
 import { finalize } from 'rxjs/operators';
 
 @Component({
@@ -18,21 +18,34 @@ export class AiPageComponent implements OnInit {
   isLoading: boolean = false;
   showSaveButton: boolean = false;
 
+  constructor(private aiService: AiService, private toastController: ToastController) {}
 
-  constructor(private aiService: AiService) {}
+  ngOnInit() {
+    this.generatedResult = 'Ask me anything...';
+  }
 
-  sendResult() {
+  async presentToast(message: string) {
+    const toast = await this.toastController.create({
+      message,
+      duration: 3000,
+      position: 'bottom',
+      color: 'danger',
+    });
+    toast.present();
+  }
+
+  send() {
     if (!this.termInput || !this.termInput.trim()) {
-      this.generatedResult = 'Please enter a term to search.';
+      this.generatedResult = 'Please enter a term to search';
       this.showSaveButton = false;
       return;
     }
-    
+
     try {
       this.isLoading = true;
       this.generatedResult = 'Thinking...';
-      this.showSaveButton = false; 
-      
+      this.showSaveButton = false;
+
       this.aiService.getAiResponse(this.termInput)
         .pipe(finalize(() => {
           this.isLoading = false;
@@ -42,22 +55,21 @@ export class AiPageComponent implements OnInit {
           next: (response) => {
             console.log('Received response:', response);
             this.generatedResult = response || 'No response received';
-            this.showSaveButton = true; 
+            this.showSaveButton = true;
           },
           error: (error) => {
             console.error('Error in component:', error);
-            this.generatedResult = 'Sorry, there was an error processing your request.';
+            this.generatedResult = 'Sorry, there was an error processing your request';
             this.showSaveButton = false;
           }
         });
     } catch (e) {
       console.error('Unexpected error:', e);
       this.isLoading = false;
-      this.generatedResult = 'An unexpected error occurred.';
+      this.generatedResult = 'An unexpected error occurred';
       this.showSaveButton = false;
     }
   }
-  
 
   saveResult() {
     if (this.generatedResult && this.generatedResult.trim()) {
@@ -69,7 +81,7 @@ export class AiPageComponent implements OnInit {
       });
       localStorage.setItem('savedResults', JSON.stringify(savedResults));
       console.log('Result saved to local storage.');
-      
+
       this.termInput = '';
       this.generatedResult = '';
       this.showSaveButton = false;
@@ -77,10 +89,12 @@ export class AiPageComponent implements OnInit {
       console.warn('No result to save.');
     }
   }
-  
-  
 
-  ngOnInit() {
-    this.generatedResult = 'Ask me anything...';
+  onTermInputChange() {
+    if (!this.termInput.trim()) {
+      this.generatedResult = '';
+      this.showSaveButton = false;
+    }
   }
 }
+

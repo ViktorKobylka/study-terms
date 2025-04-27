@@ -1,4 +1,4 @@
-<ion-header>
+<ion-header> 
   <ion-toolbar color="primary">
     <ion-title class="ion-text-center">Study Terms</ion-title>
   </ion-toolbar>
@@ -11,7 +11,7 @@
         <ion-input placeholder="Enter term..." [(ngModel)]="termInput"></ion-input>
       </ion-item>
 
-      <ion-card>
+      <ion-card *ngIf="generatedResult">
         <ion-card-content>
           {{ generatedResult }}
         </ion-card-content>
@@ -20,6 +20,12 @@
       <ion-button expand="block" (click)="sendResult()">
         Send Result
       </ion-button>
+
+      <ion-button *ngIf="showSaveButton" expand="block" color="success" (click)="saveResult()">
+        Save Result
+      </ion-button>
     </div>
   </div>
 </ion-content>
+
+

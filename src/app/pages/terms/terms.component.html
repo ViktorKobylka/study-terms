@@ -9,21 +9,25 @@
     <div class="content-wrapper">
 
       <ng-container *ngIf="savedResults.length > 0; else noResults">
+        
+        <ion-reorder-group [disabled]="false" (ionItemReorder)="handleReorder($any($event))">
+          <ion-card *ngFor="let item of savedResults; let i = index">
+            <ion-card-header>
+              <ion-card-title>{{ item.term }}</ion-card-title>
+            </ion-card-header>
 
-        <ion-card *ngFor="let item of savedResults; let i = index">
-          <ion-card-header>
-            <ion-card-title>{{ item.term }}</ion-card-title>
-          </ion-card-header>
+            <ion-card-content>
+              <p><strong>Definition:</strong> {{ item.result }}</p>
+              <p><small>{{ item.date | date:'medium' }}</small></p>
 
-          <ion-card-content>
-            <p><strong>Definition:</strong> {{ item.result }}</p>
-            <p><small>{{ item.date | date:'medium' }}</small></p>
+              <ion-button color="danger" expand="block" size="small" (click)="deleteResult(i)">
+                Delete
+              </ion-button>
 
-            <ion-button color="danger" expand="block" size="small" (click)="deleteResult(i)">
-              Delete
-            </ion-button>
-          </ion-card-content>
-        </ion-card>
+              <ion-reorder slot="end"></ion-reorder>
+            </ion-card-content>
+          </ion-card>
+        </ion-reorder-group>
 
       </ng-container>
 
@@ -31,12 +35,13 @@
         <p>No saved terms</p>
       </ng-template>
 
-      <ion-button color="primary" expand="block" (click)="refreshPage()">
+      <ion-button class="refresh-button" color="primary" expand="block" (click)="refreshPage()">
         Refresh page
       </ion-button>
 
     </div>
   </div>
 </ion-content>
+
 
 

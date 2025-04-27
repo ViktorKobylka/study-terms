@@ -1,3 +1,42 @@
-<p>
-  terms works!
-</p>
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title class="ion-text-center">Saved Terms</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="outer-wrapper">
+    <div class="content-wrapper">
+
+      <ng-container *ngIf="savedResults.length > 0; else noResults">
+
+        <ion-card *ngFor="let item of savedResults; let i = index">
+          <ion-card-header>
+            <ion-card-title>{{ item.term }}</ion-card-title>
+          </ion-card-header>
+
+          <ion-card-content>
+            <p><strong>Definition:</strong> {{ item.result }}</p>
+            <p><small>{{ item.date | date:'medium' }}</small></p>
+
+            <ion-button color="danger" expand="block" size="small" (click)="deleteResult(i)">
+              Delete
+            </ion-button>
+          </ion-card-content>
+        </ion-card>
+
+        <ion-button color="primary" expand="block" (click)="refreshPage()">
+          Refresh page
+        </ion-button>
+
+      </ng-container>
+
+      <ng-template #noResults>
+        <p>No saved terms</p>
+      </ng-template>
+
+    </div>
+  </div>
+</ion-content>
+
+

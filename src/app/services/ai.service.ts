@@ -1,4 +1,3 @@
-// src/app/services/ai.service.ts
 import { Injectable } from '@angular/core';
 import { Observable, from } from 'rxjs';
 import OpenAI from 'openai';
@@ -39,7 +38,7 @@ export class AiService {
     try {
       const response = await this.client.chat.completions.create({
         messages: [
-          { role: "system", content: "You are a helpful assistant providing concise and accurate information." },
+          { role: "system", content: "You are a helpful assistant providing clear and short definitions." },
           { role: "user", content: userInput }
         ],
         temperature: 1,

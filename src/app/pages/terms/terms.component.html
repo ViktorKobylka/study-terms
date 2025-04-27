@@ -1,10 +1,8 @@
-
-
 <ion-content>
   <div class="outer-wrapper">
     <div class="content-wrapper">
 
-      <ng-container *ngIf="savedResults.length > 0; else noResults">
+      <ng-container *ngIf="savedResults && savedResults.length > 0; else noResults">
 
         <ion-reorder-group [disabled]="false" (ionItemReorder)="handleReorder($any($event))">
           <ion-item *ngFor="let item of savedResults; let i = index">
@@ -42,6 +40,9 @@
     </div>
   </div>
 </ion-content>
+
+
+
 
 
 

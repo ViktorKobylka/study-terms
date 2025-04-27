@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
+import { Storage } from '@capacitor/storage';
 
 @Component({
   selector: 'app-create-term',
@@ -16,24 +17,28 @@ export class CreateTermComponent {
 
   constructor() {}
 
-  saveTerm() {
+  async saveTerm() {
     if (!this.termInput.trim() || !this.definitionInput.trim()) {
       console.warn('Term and definition are required');
       return;
     }
-
-    const savedResults = JSON.parse(localStorage.getItem('savedResults') || '[]');
-
+  
+    const { value } = await Storage.get({ key: 'savedResults' });
+    const savedResults = value ? JSON.parse(value) : [];
+  
     savedResults.push({
       term: this.termInput,
       result: this.definitionInput,
       date: new Date()
     });
-
-    localStorage.setItem('savedResults', JSON.stringify(savedResults));
-
+  
+    await Storage.set({
+      key: 'savedResults',
+      value: JSON.stringify(savedResults),
+    });
+  
     console.log('Term saved successfully!');
-
+  
     this.termInput = '';
     this.definitionInput = '';
   }

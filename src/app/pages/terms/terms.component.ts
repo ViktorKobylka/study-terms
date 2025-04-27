@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core'; 
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
-import { ItemReorderEventDetail } from '@ionic/angular';
+import { Storage } from '@capacitor/storage';
 
 @Component({
   selector: 'app-terms',
@@ -19,33 +19,53 @@ export class TermsComponent implements OnInit {
     this.loadSavedResults();
   }
 
-  loadSavedResults() {
-    const saved = localStorage.getItem('savedResults');
-    this.savedResults = saved ? JSON.parse(saved) : [];
+  ionViewWillEnter() {
+    this.loadSavedResults();
   }
 
-  handleReorder(event: CustomEvent<ItemReorderEventDetail>) {
-    this.loadSavedResults();
+  async loadSavedResults() {
+    const saved = await Storage.get({ key: 'savedResults' });
+    this.savedResults = saved.value ? JSON.parse(saved.value) : [];
+  }
 
+  async handleReorder(event: CustomEvent) {
     const from = event.detail.from;
     const to = event.detail.to;
 
     const movedItem = this.savedResults.splice(from, 1)[0];
     this.savedResults.splice(to, 0, movedItem);
 
-    localStorage.setItem('savedResults', JSON.stringify(this.savedResults));
+    this.savedResults = [...this.savedResults];
+
+    await this.saveResultsToStorage();
 
     event.detail.complete();
   }
 
-  deleteResult(index: number) {
-    this.loadSavedResults();
-    
+  async deleteResult(index: number) {
     this.savedResults.splice(index, 1);
-    localStorage.setItem('savedResults', JSON.stringify(this.savedResults));
+    await this.saveResultsToStorage();
+  }
+
+  async addTerm(term: string, definition: string) {
+    const newTerm = { term, result: definition, date: new Date() };
+    this.savedResults.push(newTerm);
+    await this.saveResultsToStorage();
+  }
+
+  private async saveResultsToStorage() {
+    await Storage.set({
+      key: 'savedResults',
+      value: JSON.stringify(this.savedResults),
+    });
   }
 
   refreshPage() {
     this.loadSavedResults();
   }
 }
+
+
+
+
+

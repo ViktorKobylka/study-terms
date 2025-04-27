@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AiService } from '../../services/ai.service';
 import { finalize } from 'rxjs/operators';
+import { Storage } from '@capacitor/storage';
+
 
 @Component({
   selector: 'app-ai-page',
@@ -71,17 +73,24 @@ export class AiPageComponent implements OnInit {
     }
   }
 
-  saveResult() {
+  async saveResult() {
     if (this.generatedResult && this.generatedResult.trim()) {
-      const savedResults = JSON.parse(localStorage.getItem('savedResults') || '[]');
+      const { value } = await Storage.get({ key: 'savedResults' });
+      const savedResults = value ? JSON.parse(value) : [];
+  
       savedResults.push({
         term: this.termInput,
         result: this.generatedResult,
         date: new Date()
       });
-      localStorage.setItem('savedResults', JSON.stringify(savedResults));
-      console.log('Result saved to local storage.');
-
+  
+      await Storage.set({
+        key: 'savedResults',
+        value: JSON.stringify(savedResults),
+      });
+  
+      console.log('Result saved to Capacitor Storage.');
+  
       this.termInput = '';
       this.generatedResult = '';
       this.showSaveButton = false;

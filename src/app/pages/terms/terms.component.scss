@@ -1,8 +1,4 @@
-ion-header {
-    --background: #3880ff;
-    --color: white;
-  }
-  
+
   ion-content {
     --background: #f0f0f0;
   }
@@ -10,7 +6,7 @@ ion-header {
   .outer-wrapper {
     display: flex;
     justify-content: center;
-    align-items: flex-start; /* Changed to flex-start for better scrolling behavior if many cards */
+    align-items: flex-start; 
     min-height: 100%;
     padding-top: 20px;
   }
@@ -28,6 +24,11 @@ ion-header {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     background-color: #fff;
   }
+
+  .full-width {
+    width: 100%;
+  }
+  
   
   ion-card {
     width: 100%;

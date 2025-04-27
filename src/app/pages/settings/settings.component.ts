@@ -15,11 +15,11 @@ export class SettingsComponent {
   constructor(private toastController: ToastController) {}
 
   async clearLocalStorage() {
-    await Storage.clear();
+    await Storage.clear(); // clear all data from storage
     console.log('Capacitor Storage cleared.');
   
     const toast = await this.toastController.create({
-      message: 'Storage cleared successfully!',
+      message: 'Storage cleared successfully!', // show toast notification
       duration: 1000,
       position: 'bottom',
       color: 'success',
@@ -27,3 +27,4 @@ export class SettingsComponent {
     await toast.present();
   }
 }
+
